@@ -1,10 +1,17 @@
 package de.shoppinglist.android.datasource;
 
+import de.shoppinglist.android.bean.Shoppinglist;
 import de.shoppinglist.android.constant.DBConstants;
 
 public class ShoppingListPersistence {
 	
-	public void addShoppingList(ShoppinglistDataSource datasource){
+	private ShoppinglistDataSource datasource;
+	
+	public ShoppingListPersistence(ShoppinglistDataSource datasource){
+		this.datasource = datasource;
+	}
+	
+	public void add(Shoppinglist shoppinglist){
 		datasource.isDbLockedByThread();
 		
 		// then insert a new one
@@ -14,7 +21,7 @@ public class ShoppingListPersistence {
 		datasource.getDatabase().execSQL(sqlInsertNew);
 	}
 	
-	public void updateShoppingList(ShoppinglistDataSource datasource){
+	public void update(Shoppinglist shoppinglist){
 		datasource.isDbLockedByThread();
 
 		// at first set the old shoppinglist to finished (current_timestamp)

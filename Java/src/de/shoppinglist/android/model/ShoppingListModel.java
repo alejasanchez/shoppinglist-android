@@ -20,6 +20,7 @@ public class ShoppingListModel{
 	
 	
 	private ShoppingListModel(){
+		currentShoppingList = new Shoppinglist();
 	}
 	
 	public static ShoppingListModel getInstance(Context context){
@@ -32,11 +33,13 @@ public class ShoppingListModel{
 	}
 	
 	public void moveShoppingListToHistory(){
-		shoppingListPersistance = new ShoppingListPersistence();
+		shoppingListPersistance = new ShoppingListPersistence(datasource);
 		datasource.addAllToHistory();
 		datasource.deleteAllShoppinglistProductMappings();
-		shoppingListPersistance.updateShoppingList(datasource);
-		shoppingListPersistance.addShoppingList(datasource);
+		currentShoppingList.finish();
+		shoppingListPersistance.update(currentShoppingList);
+		currentShoppingList = new Shoppinglist();
+		shoppingListPersistance.add(currentShoppingList);
+		
 	}
-	
 }
