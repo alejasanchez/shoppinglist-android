@@ -24,6 +24,8 @@ import de.shoppinglist.android.helper.SQLiteHelper;
 import de.shoppinglist.android.helper.TranslateUmlauts;
 
 public class ShoppinglistDataSource {
+	
+	private ShoppinglistDataSource instance;
 
 	private SQLiteDatabase database;
 
@@ -36,6 +38,17 @@ public class ShoppinglistDataSource {
 	 */
 	public ShoppinglistDataSource(final Context context) {
 		this.dbHelper = new SQLiteHelper(context);
+	}
+	
+	public ShoppinglistDataSource getInstance(final Context context){
+		if (instance == null){
+			instance = new ShoppinglistDataSource(context);
+		}
+		return instance;
+	}
+	
+	public SQLiteDatabase getDatabase(){
+		return database;
 	}
 
 	/**
@@ -313,6 +326,11 @@ public class ShoppinglistDataSource {
 	 * creates a new shoppinglist (Table: shoppinglist)
 	 */
 	public void createNewShoppinglist() {
+		updateShoppinglist();
+		addShoppinglist();
+	}
+	
+	private void updateShoppinglist(){
 		this.isDbLockedByThread();
 
 		// at first set the old shoppinglist to finished (current_timestamp)
@@ -324,13 +342,19 @@ public class ShoppinglistDataSource {
 				+ ")";
 
 		this.database.execSQL(sqlMarkShoppinglistFinished);
-
+	}
+	
+	private void addShoppinglist(){
+		this.isDbLockedByThread();
+		
 		// then insert a new one
 		final String sqlInsertNew = "INSERT INTO " + DBConstants.TAB_SHOPPINGLIST_NAME + " ("
 				+ DBConstants.COL_SHOPPINGLIST_CREATED_TIME + ") VALUES (CURRENT_TIMESTAMP)";
 
 		this.database.execSQL(sqlInsertNew);
 	}
+	
+	
 
 	/**
 	 * deletes all mappings from shoppinglistProductMapping
@@ -1511,7 +1535,7 @@ public class ShoppinglistDataSource {
 	 * </p>
 	 * 
 	 */
-	private void isDbLockedByThread() {
+	public void isDbLockedByThread() {
 		int counter = 0;
 		while (((this.database != null)
 				&& (this.database.isDbLockedByCurrentThread() || this.database
