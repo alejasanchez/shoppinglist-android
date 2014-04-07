@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import de.shoppinglist.android.datasource.ShoppinglistDataSource;
+import de.shoppinglist.android.model.ShoppingListModel;
 
 /**
  * 
@@ -26,6 +27,8 @@ public abstract class AbstractShoppinglistActivity extends Activity {
 	private Context context;
 
 	private ShoppinglistDataSource datasource;
+	
+	private ShoppingListModel model;
 
 	@Override
 	public void finish() {
@@ -84,6 +87,7 @@ public abstract class AbstractShoppinglistActivity extends Activity {
 		}
 		this.datasource = new ShoppinglistDataSource(this);
 		this.datasource.open();
+		this.model = ShoppingListModel.getInstance(this);
 		this.context = this;
 	}
 
@@ -121,5 +125,9 @@ public abstract class AbstractShoppinglistActivity extends Activity {
 			}
 		}
 		return noEmptyEditText;
+	}
+
+	public ShoppingListModel getModel() {
+		return model;
 	}
 }

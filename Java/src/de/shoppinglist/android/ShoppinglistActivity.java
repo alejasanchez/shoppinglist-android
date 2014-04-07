@@ -482,7 +482,7 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 					new OnClickListener() {
 
 						public void onClick(final DialogInterface dialog, final int which) {
-							moveShoppingListToHistory();
+							getModel().moveShoppingListToHistory();
 							refreshLayout();
 						}
 					});
@@ -497,12 +497,6 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 
 			alertBox.show();
 		}
-	}
-	
-	private void moveShoppingListToHistory(){
-		datasource.addAllToHistory();
-		datasource.deleteAllShoppinglistProductMappings();
-		datasource.createNewShoppinglist();
 	}
 
 }
