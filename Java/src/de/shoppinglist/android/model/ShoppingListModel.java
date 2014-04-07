@@ -5,6 +5,8 @@ import java.util.List;
 
 import de.shoppinglist.android.bean.Shoppinglist;
 import de.shoppinglist.android.bean.ShoppinglistProductMapping;
+import de.shoppinglist.android.datasource.IPersistence;
+import de.shoppinglist.android.datasource.PersistenceFactory;
 import de.shoppinglist.android.datasource.ShoppingListPersistence;
 import de.shoppinglist.android.datasource.ShoppinglistDataSource;
 import android.content.Context;
@@ -16,7 +18,6 @@ public class ShoppingListModel{
 	
 	private List<ShoppinglistProductMapping> shoppingListItems;
 	private Shoppinglist currentShoppingList;
-	private ShoppingListPersistence shoppingListPersistance;
 	
 	
 	private ShoppingListModel(){
@@ -33,7 +34,7 @@ public class ShoppingListModel{
 	}
 	
 	public void moveShoppingListToHistory(){
-		shoppingListPersistance = new ShoppingListPersistence(datasource);
+		IPersistence shoppingListPersistance = PersistenceFactory.getInstance().getShoppingListPersistence(datasource);
 		datasource.addAllToHistory();
 		datasource.deleteAllShoppinglistProductMappings();
 		currentShoppingList.finish();
