@@ -55,6 +55,8 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 	private List<Store> storesToShowInOverview;
 
 	private int viewType;
+	
+	
 
 	/**
 	 * because this activity is the "Home" of the app, but we have two different
@@ -81,37 +83,7 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 		// handle clicks on addToHistory button
 		this.buttonAddToHistoryAlphabeticallyView = (Button) this
 				.findViewById(R.id.buttonAddToHistoryAlphabetOverview);
-		this.buttonAddToHistoryAlphabeticallyView.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(final View v) {
-				final AlertDialog.Builder alertBox = new AlertDialog.Builder(
-						ShoppinglistActivity.this.context);
-				alertBox.setMessage(ShoppinglistActivity.this
-						.getString(R.string.msg_really_add_shoppinglist_to_history));
-				alertBox.setPositiveButton(ShoppinglistActivity.this.getString(R.string.msg_yes),
-						new OnClickListener() {
-
-							public void onClick(final DialogInterface dialog, final int which) {
-								ShoppinglistActivity.this.datasource.addAllToHistory();
-								ShoppinglistActivity.this.datasource
-										.deleteAllShoppinglistProductMappings();
-								ShoppinglistActivity.this.datasource.createNewShoppinglist();
-								ShoppinglistActivity.this.refreshLayout();
-							}
-						});
-
-				alertBox.setNegativeButton(ShoppinglistActivity.this.getString(R.string.msg_no),
-						new OnClickListener() {
-
-							public void onClick(final DialogInterface dialog, final int which) {
-								// do nothing here
-							}
-						});
-
-				alertBox.show();
-			}
-
-		});
+		this.buttonAddToHistoryAlphabeticallyView.setOnClickListener(new AddShoppingListToHistoryListener());
 
 		// handle long clicks on the list items
 		this.listAlphabetically.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -247,37 +219,7 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 		// handle clicks on addToHistory button
 		this.buttonAddToHistoryStoreView = (Button) this
 				.findViewById(R.id.buttonAddToHistoryStoreOverview);
-		this.buttonAddToHistoryStoreView.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(final View v) {
-				final AlertDialog.Builder alertBox = new AlertDialog.Builder(
-						ShoppinglistActivity.this.context);
-				alertBox.setMessage(ShoppinglistActivity.this
-						.getString(R.string.msg_really_add_shoppinglist_to_history));
-				alertBox.setPositiveButton(ShoppinglistActivity.this.getString(R.string.msg_yes),
-						new OnClickListener() {
-
-							public void onClick(final DialogInterface dialog, final int which) {
-								ShoppinglistActivity.this.datasource.addAllToHistory();
-								ShoppinglistActivity.this.datasource
-										.deleteAllShoppinglistProductMappings();
-								ShoppinglistActivity.this.datasource.createNewShoppinglist();
-								ShoppinglistActivity.this.refreshLayout();
-							}
-						});
-
-				alertBox.setNegativeButton(ShoppinglistActivity.this.getString(R.string.msg_no),
-						new OnClickListener() {
-
-							public void onClick(final DialogInterface dialog, final int which) {
-								// do nothing here
-							}
-						});
-
-				alertBox.show();
-			}
-
-		});
+		this.buttonAddToHistoryStoreView.setOnClickListener(new AddShoppingListToHistoryListener());
 
 		// handle long clicks on the list items
 		this.listStore.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -531,4 +473,36 @@ public class ShoppinglistActivity extends AbstractShoppinglistActivity {
 		}
 
 	}
+	
+	class AddShoppingListToHistoryListener implements View.OnClickListener {
+		public void onClick(final View v) {
+			final AlertDialog.Builder alertBox = new AlertDialog.Builder(context);
+			alertBox.setMessage(getString(R.string.msg_really_add_shoppinglist_to_history));
+			alertBox.setPositiveButton(getString(R.string.msg_yes),
+					new OnClickListener() {
+
+						public void onClick(final DialogInterface dialog, final int which) {
+							moveShoppingListToHistory();
+							refreshLayout();
+						}
+					});
+
+			alertBox.setNegativeButton(ShoppinglistActivity.this.getString(R.string.msg_no),
+					new OnClickListener() {
+
+						public void onClick(final DialogInterface dialog, final int which) {
+							// do nothing here
+						}
+					});
+
+			alertBox.show();
+		}
+	}
+	
+	private void moveShoppingListToHistory(){
+		datasource.addAllToHistory();
+		datasource.deleteAllShoppinglistProductMappings();
+		datasource.createNewShoppinglist();
+	}
+
 }
