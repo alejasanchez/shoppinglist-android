@@ -220,7 +220,7 @@ public class ShoppinglistDataSource {
 		{
 			 			
 			//shoppinglistProductMapping = new ShoppinglistProductMapping();
-			factory = new ShoppinglistProductMappingFactory();
+			factory = ShoppinglistProductMappingFactory.getInstance();
 			shoppinglistProductMapping = factory.createShoppinglistProductMapping();
 
 			final Store store = new Store();
@@ -803,7 +803,7 @@ public class ShoppinglistDataSource {
 		final List<FavoriteProductMapping> favoriteProductMappings = new LinkedList<FavoriteProductMapping>();
 		while (cursor.moveToNext()) {
 
-			factory = new FavoriteProductMappingsFactory();
+			factory = FavoriteProductMappingsFactory.getInstance();
 			//final FavoriteProductMapping favoriteProductMapping = new FavoriteProductMapping();
 			final FavoriteProductMapping favoriteProductMapping = factory.createFavoriteProductMapping();
 
@@ -1026,7 +1026,7 @@ public class ShoppinglistDataSource {
 		final List<ShoppinglistProductMapping> shoppinglistProductMappings = new LinkedList<ShoppinglistProductMapping>();
 		while (cursor.moveToNext()) {
 
-			factory = new ShoppinglistProductMappingFactory();
+			factory = ShoppinglistProductMappingFactory.getInstance();
 			//final ShoppinglistProductMapping shoppinglistProductMapping = new ShoppinglistProductMapping();
 			final ShoppinglistProductMapping shoppinglistProductMapping = factory.createShoppinglistProductMapping();
 

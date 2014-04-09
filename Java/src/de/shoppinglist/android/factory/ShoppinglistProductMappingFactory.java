@@ -4,10 +4,14 @@ import de.shoppinglist.android.bean.FavoriteProductMapping;
 import de.shoppinglist.android.bean.ShoppinglistProductMapping;
 
 public class ShoppinglistProductMappingFactory extends AbstractListFactory{
-
-	public ShoppinglistProductMappingFactory()
+	private static ShoppinglistProductMappingFactory instance = null;
+	private ShoppinglistProductMappingFactory()
 	{
 		listProdMapping = new ShoppinglistProductMapping();
+	}
+	public static ShoppinglistProductMappingFactory getInstance(){
+		if(instance == null) instance = new ShoppinglistProductMappingFactory();
+		return instance;
 	}
 	
 	@Override
