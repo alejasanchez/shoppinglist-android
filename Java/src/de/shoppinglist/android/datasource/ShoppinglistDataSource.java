@@ -22,6 +22,9 @@ import de.shoppinglist.android.constant.DBConstants;
 import de.shoppinglist.android.constant.GlobalValues;
 import de.shoppinglist.android.helper.SQLiteHelper;
 import de.shoppinglist.android.helper.TranslateUmlauts;
+import de.shoppinglist.android.factory.AbstractListFactory;
+import de.shoppinglist.android.factory.FavoriteProductMappingsFactory;
+import de.shoppinglist.android.factory.ShoppinglistProductMappingFactory;
 
 public class ShoppinglistDataSource {
 	
@@ -30,6 +33,8 @@ public class ShoppinglistDataSource {
 	private SQLiteDatabase database;
 
 	private final SQLiteHelper dbHelper;
+	
+	AbstractListFactory factory;
 
 	/**
 	 * Constructor
@@ -58,7 +63,7 @@ public class ShoppinglistDataSource {
 		this.isDbLockedByThread();
 
 		final String replaceUmlautsHistoryPart1 = "replace(replace(replace(replace(replace(replace(replace(";
-		final String replaceUmlautsHistoryPart2 = ",'&auml;','ä'),'&Auml;','Ä'),'&ouml;','ö'),'&Ouml;','Ö'),'&uuml;','ü'),'&Uuml;','Ü'),'&szlig;','ß')";
+		final String replaceUmlautsHistoryPart2 = ",'&auml;','ï¿½'),'&Auml;','ï¿½'),'&ouml;','ï¿½'),'&Ouml;','ï¿½'),'&uuml;','ï¿½'),'&Uuml;','ï¿½'),'&szlig;','ï¿½')";
 
 		final String sqlInsertHistory = "INSERT INTO " + DBConstants.TAB_HISTORY_NAME + " ("
 				+ DBConstants.COL_HISTORY_SHOPPINGLIST_ID + ", " + DBConstants.COL_HISTORY_STORE
@@ -211,8 +216,12 @@ public class ShoppinglistDataSource {
 
 		ShoppinglistProductMapping shoppinglistProductMapping = null;
 
-		while ((cursor.getCount() != 0) && cursor.moveToNext()) {
-			shoppinglistProductMapping = new ShoppinglistProductMapping();
+		while ((cursor.getCount() != 0) && cursor.moveToNext()) 
+		{
+			 			
+			//shoppinglistProductMapping = new ShoppinglistProductMapping();
+			factory = new ShoppinglistProductMappingFactory();
+			shoppinglistProductMapping = factory.createShoppinglistProductMapping();
 
 			final Store store = new Store();
 			store.setId(cursor.getInt(cursor
@@ -794,7 +803,9 @@ public class ShoppinglistDataSource {
 		final List<FavoriteProductMapping> favoriteProductMappings = new LinkedList<FavoriteProductMapping>();
 		while (cursor.moveToNext()) {
 
-			final FavoriteProductMapping favoriteProductMapping = new FavoriteProductMapping();
+			factory = new FavoriteProductMappingsFactory();
+			//final FavoriteProductMapping favoriteProductMapping = new FavoriteProductMapping();
+			final FavoriteProductMapping favoriteProductMapping = factory.createFavoriteProductMapping();
 
 			final Favorite favorite = new Favorite();
 			favorite.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.COL_FAVORITE_ID)));
@@ -983,7 +994,8 @@ public class ShoppinglistDataSource {
 	 * @param storeId
 	 * @return List<ShoppinglistProductMapping>
 	 */
-	public List<ShoppinglistProductMapping> getProductsOnShoppingList(final int storeId) {
+	public List<ShoppinglistProductMapping> getProductsOnShoppingList(final int storeId) 
+	{
 		this.isDbLockedByThread();
 
 		String sqlQuery = "SELECT * FROM " + DBConstants.TAB_SHOPPINGLIST_PRODUCT_MAPPING_NAME
@@ -1014,7 +1026,9 @@ public class ShoppinglistDataSource {
 		final List<ShoppinglistProductMapping> shoppinglistProductMappings = new LinkedList<ShoppinglistProductMapping>();
 		while (cursor.moveToNext()) {
 
-			final ShoppinglistProductMapping shoppinglistProductMapping = new ShoppinglistProductMapping();
+			factory = new ShoppinglistProductMappingFactory();
+			//final ShoppinglistProductMapping shoppinglistProductMapping = new ShoppinglistProductMapping();
+			final ShoppinglistProductMapping shoppinglistProductMapping = factory.createShoppinglistProductMapping();
 
 			final Shoppinglist shoppinglist = new Shoppinglist();
 			shoppinglist
